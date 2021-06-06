@@ -11,12 +11,13 @@
             </#if>
             <div class="m-2">
                 <span>${message.text}</span><br/>
+                <b>${message.phone}</b><br/>
                 <i>#${message.tag}</i>
             </div>
             <div class="card-footer text-muted container">
                 <div class="row">
                     <a class="col align-self-center" href="/user-messages/${message.author.id}">${message.authorName}</a>
-                    <a class="col align-self-center" href="/messages/${message.id}/like">
+                                    <a class="col align-self-center" href="/messages/${message.id}/like">
                         <#if message.meLiked>
                             <i class="fas fa-heart"></i>
                         <#else>
@@ -26,7 +27,25 @@
                     </a>
                     <#if message.author.id == currentUserId>
                         <a class="col btn btn-primary" href="/user-messages/${message.author.id}?message=${message.id}">
-                            Edit
+                            Изменить
+                        </a>
+                    </#if>
+                          </a>
+                    <#if message.author.id == currentUserId>
+
+                        <form action="/main/${message.id}" method="get">
+                            <input type="submit" class="col btn btn-danger" value="Удалить">
+                        </form>
+
+                        </a>
+
+                    </#if>
+                    <#if isAdmin>
+                         </a>
+                         <form action="/adminMes/${message.id}" method="get">
+                            <input type="submit" class="col btn btn-danger" value="Удалить(Админ)">
+                        </form>
+
                         </a>
                     </#if>
                 </div>

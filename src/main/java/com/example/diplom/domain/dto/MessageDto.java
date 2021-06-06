@@ -1,12 +1,13 @@
-package com.example.sweater.domain.dto;
+package com.example.diplom.domain.dto;
 
-import com.example.sweater.domain.Message;
-import com.example.sweater.domain.User;
-import com.example.sweater.domain.util.MessageHelper;
+import com.example.diplom.domain.Message;
+import com.example.diplom.domain.User;
+import com.example.diplom.domain.util.MessageHelper;
 
 public class MessageDto {
     private Long id;
     private String text;
+    private String phone;
     private String tag;
     private User author;
     private String filename;
@@ -16,6 +17,7 @@ public class MessageDto {
     public MessageDto(Message message, Long likes, Boolean meLiked) {
         this.id = message.getId();
         this.text = message.getText();
+        this.phone = message.getPhone();
         this.tag = message.getTag();
         this.author = message.getAuthor();
         this.filename = message.getFilename();
@@ -34,6 +36,8 @@ public class MessageDto {
     public String getText() {
         return text;
     }
+
+    public String getPhone() {return phone;}
 
     public String getTag() {
         return tag;

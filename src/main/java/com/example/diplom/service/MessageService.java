@@ -1,8 +1,8 @@
-package com.example.sweater.service;
+package com.example.diplom.service;
 
-import com.example.sweater.domain.User;
-import com.example.sweater.domain.dto.MessageDto;
-import com.example.sweater.repos.MessageRepo;
+import com.example.diplom.domain.User;
+import com.example.diplom.domain.dto.MessageDto;
+import com.example.diplom.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

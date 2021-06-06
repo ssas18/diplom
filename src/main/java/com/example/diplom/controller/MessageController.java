@@ -1,16 +1,17 @@
-package com.example.sweater.controller;
+package com.example.diplom.controller;
 
-import com.example.sweater.domain.Message;
-import com.example.sweater.domain.User;
-import com.example.sweater.domain.dto.MessageDto;
-import com.example.sweater.repos.MessageRepo;
-import com.example.sweater.service.MessageService;
+import com.example.diplom.domain.Message;
+import com.example.diplom.domain.User;
+import com.example.diplom.domain.dto.MessageDto;
+import com.example.diplom.repos.MessageRepo;
+import com.example.diplom.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,8 +42,8 @@ public class MessageController {
     private String uploadPath;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
-        return "greeting";
+    public String greeting(Map<String, Object> model,@AuthenticationPrincipal User user) {
+                return "greeting";
     }
 
     @GetMapping("/main")
@@ -88,7 +89,8 @@ public class MessageController {
 
         model.addAttribute("messages", messages);
 
-        return "main";
+
+        return "redirect:/main";
     }
 
     private void saveFile(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
@@ -122,9 +124,9 @@ public class MessageController {
         model.addAttribute("subscriptionsCount", author.getSubscriptions().size());
         model.addAttribute("subscribersCount", author.getSubscribers().size());
         model.addAttribute("isSubscriber", author.getSubscribers().contains(currentUser));
-        model.addAttribute("page", page);
         model.addAttribute("message", message);
         model.addAttribute("isCurrentUser", currentUser.equals(author));
+        model.addAttribute("page", page);
         model.addAttribute("url", "/user-messages/" + author.getId());
 
         return "userMessages";
@@ -134,11 +136,16 @@ public class MessageController {
     public String updateMessage(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
-            @RequestParam("id") Message message,
+            @RequestParam(value = "id", defaultValue = "1") Message message ,
             @RequestParam("text") String text,
             @RequestParam("tag") String tag,
+            @RequestParam("phone") String phone,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
+        if(message.equals(null)){
+
+            message.setId(1l);
+        }
         if (message.getAuthor().equals(currentUser)) {
             if (!StringUtils.isEmpty(text)) {
                 message.setText(text);
@@ -147,6 +154,9 @@ public class MessageController {
             if (!StringUtils.isEmpty(tag)) {
                 message.setTag(tag);
             }
+            if (!StringUtils.isEmpty(phone)) {
+                message.setPhone(phone);
+            }
 
             saveFile(message, file);
 
@@ -154,6 +164,18 @@ public class MessageController {
         }
 
         return "redirect:/user-messages/" + user;
+    }
+    @GetMapping("/main/{id}")
+    public String delMessage(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable("id") Message message,
+            Model model
+    )  {
+        if (message.getAuthor().equals(currentUser)) {
+           messageRepo.delete(message);
+           model.addAttribute("messageDelete",message);
+        }
+        return "redirect:/main";
     }
 
     @GetMapping("/messages/{message}/like")
@@ -178,5 +200,19 @@ public class MessageController {
                 .forEach(pair -> redirectAttributes.addAttribute(pair.getKey(), pair.getValue()));
 
         return "redirect:" + components.getPath();
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/adminMes/{id}")
+    public String delMessageAdmin(
+            @PathVariable("id") Message message,
+            Model model
+    )  {
+
+            messageRepo.delete(message);
+            model.addAttribute("messageDelete",message);
+
+        return "redirect:/main";
     }
 }

@@ -1,8 +1,8 @@
-package com.example.sweater.controller;
+package com.example.diplom.controller;
 
-import com.example.sweater.domain.Role;
-import com.example.sweater.domain.User;
-import com.example.sweater.service.UserSevice;
+import com.example.diplom.domain.Role;
+import com.example.diplom.domain.User;
+import com.example.diplom.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +42,7 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {
-        userSevice.saveUser(user, username, form);
+        userSevice.saveUser(user, form);
 
         return "redirect:/user";
     }

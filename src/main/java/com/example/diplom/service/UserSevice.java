@@ -1,8 +1,8 @@
-package com.example.sweater.service;
+package com.example.diplom.service;
 
-import com.example.sweater.domain.Role;
-import com.example.sweater.domain.User;
-import com.example.sweater.repos.UserRepo;
+import com.example.diplom.domain.Role;
+import com.example.diplom.domain.User;
+import com.example.diplom.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,7 +63,7 @@ public class UserSevice implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Sweater. Please, visit next link: http://%s/activate/%s",
+                            "Welcome to socialfindworker. Please, visit next link: http://%s/activate/%s",
                     user.getUsername(),
                     hostname,
                     user.getActivationCode()
@@ -91,8 +91,8 @@ public class UserSevice implements UserDetailsService {
         return userRepo.findAll();
     }
 
-    public void saveUser(User user, String username, Map<String, String> form) {
-        user.setUsername(username);
+    public void saveUser(User user,  Map<String, String> form) {
+
 
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)

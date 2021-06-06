@@ -1,6 +1,6 @@
-package com.example.sweater.domain;
+package com.example.diplom.domain;
 
-import com.example.sweater.domain.util.MessageHelper;
+import com.example.diplom.domain.util.MessageHelper;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -19,6 +19,8 @@ public class Message {
     private String text;
     @Length(max = 255, message = "Message too long (more than 255)")
     private String tag;
+    @Length(max = 12, message = "Phone too long (more than 12)")
+    private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -37,10 +39,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(String text, String tag, User user) {
+    public Message(String text, String tag,String phone, User user) {
         this.author = user;
         this.text = text;
         this.tag = tag;
+        this.phone = phone;
     }
 
     public String getAuthorName() {
@@ -94,4 +97,8 @@ public class Message {
     public void setFilename(String filename) {
         this.filename = filename;
     }
+
+    public String getPhone() { return phone; }
+
+    public void setPhone(String phone) { this.phone = phone; }
 }

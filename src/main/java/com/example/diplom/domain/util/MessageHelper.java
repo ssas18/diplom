@@ -1,6 +1,6 @@
-package com.example.sweater.domain.util;
+package com.example.diplom.domain.util;
 
-import com.example.sweater.domain.User;
+import com.example.diplom.domain.User;
 
 public abstract class MessageHelper {
     public static String getAuthorName(User author) {
