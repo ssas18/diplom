@@ -47,6 +47,7 @@ public class MessageController {
                 .getLocation();
         String srcPath = location.toString().replace("file:/", "")
                 .replace("bin", "src").replace("/target/classes/","/images");
+        System.out.println(srcPath);
         return srcPath;
     }
 
