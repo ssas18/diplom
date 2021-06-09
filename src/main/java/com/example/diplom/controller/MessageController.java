@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -41,18 +42,27 @@ public class MessageController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    public static String getMySourcePath() {
+        URL location = MessageController.class.getProtectionDomain().getCodeSource()
+                .getLocation();
+        String srcPath = location.toString().replace("file:/", "")
+                .replace("bin", "src").replace("/target/classes/","/images");
+        return srcPath;
+    }
+
     private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
+            File uploadDir = new File(getMySourcePath());
 
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
+            ;
 
             String uuidFile = UUID.randomUUID().toString();
             String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
+            file.transferTo(new File(getMySourcePath() + "/" + resultFilename));
 
             message.setFilename(resultFilename);
         }
