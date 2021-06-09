@@ -62,8 +62,9 @@ public class UserSevice implements UserDetailsService {
     private void sendMessage(User user) {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to socialfindworker. Please, visit next link: http://%s/activate/%s",
+                    "Привет, %s! \n" +
+                            "Добро пожаловать в  SocialFindWorker. Пожалуйста перейдите" +
+                            " по ссылке для активации Вас в системе: http://%s/activate/%s",
                     user.getUsername(),
                     hostname,
                     user.getActivationCode()

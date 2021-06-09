@@ -38,7 +38,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String userSave(
-            @RequestParam String username,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {

@@ -22,8 +22,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/static/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
@@ -39,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userSevice)
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userSevice)
                 .passwordEncoder(passwordEncoder);
     }
 }

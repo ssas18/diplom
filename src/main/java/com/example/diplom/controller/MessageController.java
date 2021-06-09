@@ -41,59 +41,7 @@ public class MessageController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    @GetMapping("/")
-    public String greeting(Map<String, Object> model,@AuthenticationPrincipal User user) {
-                return "greeting";
-    }
-
-    @GetMapping("/main")
-    public String main(
-            @RequestParam(required = false, defaultValue = "") String filter,
-            Model model,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
-            @AuthenticationPrincipal User user
-    ) {
-        Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-
-        model.addAttribute("page", page);
-        model.addAttribute("url", "/main");
-        model.addAttribute("filter", filter);
-
-        return "main";
-    }
-
-    @PostMapping("/main")
-    public String add(
-            @AuthenticationPrincipal User user,
-            @Valid Message message,
-            BindingResult bindingResult,
-            Model model,
-            @RequestParam("file") MultipartFile file
-    ) throws IOException {
-        message.setAuthor(user);
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
-
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("message", message);
-        } else {
-            saveFile(message, file);
-
-            model.addAttribute("message", null);
-
-            messageRepo.save(message);
-        }
-
-        Iterable<Message> messages = messageRepo.findAll();
-
-        model.addAttribute("messages", messages);
-
-
-        return "redirect:/main";
-    }
-
-    private void saveFile(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
+    private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -110,8 +58,75 @@ public class MessageController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/adminMes/{id}")
+    public String delMessageAdmin(
+            @PathVariable("id") Message message,
+            Model model
+    )  {
+
+        messageRepo.delete(message);
+        model.addAttribute("messageDelete",message);
+
+        return "redirect:/main";
+    }
+
+    @GetMapping("/")
+    public String homepage(Map<String, Object> model,@AuthenticationPrincipal User user) {
+                return "greeting";
+    }
+
+    @GetMapping("/main")
+    public String mainPage(
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        Page<MessageDto> page = messageService.messageList(pageable, filter, currentUser);
+
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main");
+        model.addAttribute("filter", filter);
+
+        return "main";
+    }
+
+    @PostMapping("/main")
+    public String addMessage(
+            @AuthenticationPrincipal User currentUser,
+            @Valid Message message,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        message.setAuthor(currentUser);
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
+
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("message", message);
+        } else {
+            savePhoto(message, file);
+
+            model.addAttribute("message", null);
+
+            messageRepo.save(message);
+        }
+
+        Iterable<Message> messages = messageRepo.findAll();
+
+        model.addAttribute("messages", messages);
+
+
+        return "redirect:/main";
+    }
+
+
+
     @GetMapping("/user-messages/{author}")
-    public String userMessges(
+    public String messgesOfUsr(
             @AuthenticationPrincipal User currentUser,
             @PathVariable User author,
             Model model,
@@ -133,7 +148,7 @@ public class MessageController {
     }
 
     @PostMapping("/user-messages/{user}")
-    public String updateMessage(
+    public String updateUserMessage(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
             @RequestParam(value = "id", defaultValue = "1") Message message ,
@@ -158,7 +173,7 @@ public class MessageController {
                 message.setPhone(phone);
             }
 
-            saveFile(message, file);
+            savePhoto(message, file);
 
             messageRepo.save(message);
         }
@@ -166,7 +181,7 @@ public class MessageController {
         return "redirect:/user-messages/" + user;
     }
     @GetMapping("/main/{id}")
-    public String delMessage(
+    public String deleteMessage(
             @AuthenticationPrincipal User currentUser,
             @PathVariable("id") Message message,
             Model model
@@ -179,7 +194,7 @@ public class MessageController {
     }
 
     @GetMapping("/messages/{message}/like")
-    public String like(
+    public String sendLikeToMsg(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Message message,
             RedirectAttributes redirectAttributes,
@@ -203,16 +218,5 @@ public class MessageController {
     }
 
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/adminMes/{id}")
-    public String delMessageAdmin(
-            @PathVariable("id") Message message,
-            Model model
-    )  {
 
-            messageRepo.delete(message);
-            model.addAttribute("messageDelete",message);
-
-        return "redirect:/main";
-    }
 }

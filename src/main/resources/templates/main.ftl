@@ -13,7 +13,10 @@
                         <a class="dropdown-item" href="main?filter=">очистить фильтрацию</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="main?filter=Работа+по+дому">Работа по дому</a>
-                        <a class="dropdown-item" href="main?filter=ds">ds</a>
+                        <a class="dropdown-item" href="main?filter=Ремонт+автомобилей">Ремонт автомобилей</a>
+                        <a class="dropdown-item" href="main?filter=Сложные+технические+работы">Сложные технические работы</a>
+                        <a class="dropdown-item" href="main?filter=Услуги+токаря">Услуги токаря</a>
+                        <a class="dropdown-item" href="main?filter=Другое">Другое</a>
                     </div>
                 </div>
              <#-- или поиск по категориям вручную <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Поиск по категории">-->
