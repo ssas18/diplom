@@ -63,11 +63,16 @@ public class UserSevice implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Привет, %s! \n" +
-                            "Добро пожаловать в  SocialFindWorker. Пожалуйста перейдите" +
-                            " по ссылке для активации Вас в системе: http://%s/activate/%s",
+                            "Добро пожаловать в  SocialFindWorker. Вы можете перейти" +
+                            " по уникалной ссылке для активации Вас в системе: http://%s/activate/%s \n " +
+                            "Ваш логин -  %s \n" +
+                            "Ваш пароль -  %s \n",
                     user.getUsername(),
                     hostname,
-                    user.getActivationCode()
+                    user.getActivationCode(),
+                    user.getUsername(),
+                    passwordEncoder.encode(user.getPassword())
+
             );
 
             mailSender.send(user.getEmail(), "Activation code", message);
@@ -125,7 +130,7 @@ public class UserSevice implements UserDetailsService {
         }
 
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
         }
 
         userRepo.save(user);
