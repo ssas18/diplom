@@ -5,6 +5,7 @@ import com.example.diplom.domain.dto.CaptchaResponseDto;
 import com.example.diplom.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,24 @@ public class RegistrationController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @GetMapping("/changepass")
+    public String changepass() {
+
+        return "changepass";
+    }
+
+    @PostMapping("/changepass")
+    public String changepassuser(
+            User user,
+            @RequestParam String password,
+            @RequestParam String email
+    ) {
+        if (user.getEmail() == email) {
+            userSevice.updateUserAfterPassChange(user, password, email);
+        }
+        return "redirect:/login";
+    }
 
     @GetMapping("/registration")
     public String registration() {

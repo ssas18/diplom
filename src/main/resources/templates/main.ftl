@@ -19,8 +19,10 @@
                         <a class="dropdown-item" href="main?filter=Другое">Другое</a>
                     </div>
                 </div>
-             <#-- или поиск по категориям вручную <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Поиск по категории">-->
-                <button type="submit" class="btn btn-primary ml-2">очистка фильтров </button>
+                <button type="submit" class="btn btn-primary ml-2">Очистка фильтров </button>
+                <div class="card ml-3">
+                <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Поиск по сообщению">
+                </div>
             </form>
         </div>
     </div>

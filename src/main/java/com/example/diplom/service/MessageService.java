@@ -20,6 +20,13 @@ public class MessageService {
             return messageRepo.findAll(pageable, user);
         }
     }
+    public Page<MessageDto> messageListbytext(Pageable pageable, String filter, User user) {
+        if (filter != null && !filter.isEmpty()) {
+            return messageRepo.findByText(filter, pageable, user);
+        } else {
+            return messageRepo.findAll(pageable, user);
+        }
+    }
 
     public Page<MessageDto> messageListForUser(Pageable pageable, User currentUser, User author) {
         return messageRepo.findByUser(pageable, author, currentUser);

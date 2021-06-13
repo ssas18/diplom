@@ -139,6 +139,19 @@ public class UserSevice implements UserDetailsService {
             sendMessage(user);
         }
     }
+    public void updateUserAfterPassChange(User user, String password, String email) {
+                user = userRepo.findByEmail(email);
+            if (!StringUtils.isEmpty(email)) {
+                user.setActivationCode(UUID.randomUUID().toString());
+            }
+
+        if (!StringUtils.isEmpty(password)) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+
+        //userRepo.save(user);
+            sendMessage(user);
+    }
 
     public void subscribe(User currentUser, User user) {
         user.getSubscribers().add(currentUser);

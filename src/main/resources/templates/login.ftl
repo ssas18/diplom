@@ -12,5 +12,9 @@
             ${message}
         </div>
     </#if>
+    <form action="/changepass" method="get">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <button class="btn btn-primary" type="submit"><#if user??><#else>Забыли пароль?</#if></button>
+    </form>
     <@l.login "/login" false/>
 </@c.page>

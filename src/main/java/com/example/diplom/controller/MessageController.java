@@ -89,15 +89,20 @@ public class MessageController {
     @GetMapping("/main")
     public String mainPage(
             @RequestParam(required = false, defaultValue = "") String filter,
+            @RequestParam(required = false, defaultValue = "") String filter1,
             Model model,
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal User currentUser
     ) {
-        Page<MessageDto> page = messageService.messageList(pageable, filter, currentUser);
+        Page<MessageDto> page = messageService.messageListbytext(pageable, filter, currentUser);
+       // Page<MessageDto> page1 = messageService.messageListbytext(pageable, filter1, currentUser);
 
         model.addAttribute("page", page);
+       // model.addAttribute("page1", page1);
         model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
+       // model.addAttribute("filter1", filter1);
+
 
         return "main";
     }
