@@ -42,16 +42,35 @@ public class MessageController {
     @Value("${upload.path}")
     private String uploadPath;
 
-     /* public static String getMySourcePath() {
+      public static String getMySourcePath() {
         URL location = MessageController.class.getProtectionDomain().getCodeSource()
                 .getLocation();
         String srcPath = location.toString().replace("file:/", "")
-                .replace("bin", "src").replace("/target/classes/","/images");
-        System.out.println(srcPath);
+                .replace("bin", "src").replace("/target/classes/","/images")
+                .replace("/","\\");
+
         return srcPath;
-    }*/
+    }
 
     private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+             String path  = getMySourcePath();
+            System.out.println(path);
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File( path + "\\" + resultFilename));
+
+            message.setFilename(resultFilename);
+        }
+    }
+    private void savePhoto1(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -89,20 +108,15 @@ public class MessageController {
     @GetMapping("/main")
     public String mainPage(
             @RequestParam(required = false, defaultValue = "") String filter,
-            @RequestParam(required = false, defaultValue = "") String filter1,
             Model model,
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal User currentUser
     ) {
-        Page<MessageDto> page = messageService.messageListbytext(pageable, filter, currentUser);
-       // Page<MessageDto> page1 = messageService.messageListbytext(pageable, filter1, currentUser);
+        Page<MessageDto> page = messageService.messageList(pageable, filter, currentUser);
 
         model.addAttribute("page", page);
-       // model.addAttribute("page1", page1);
         model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
-       // model.addAttribute("filter1", filter1);
-
 
         return "main";
     }
