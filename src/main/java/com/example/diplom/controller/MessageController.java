@@ -45,13 +45,15 @@ public class MessageController {
       public static String getMySourcePath() {
         URL location = MessageController.class.getProtectionDomain().getCodeSource()
                 .getLocation();
-        String srcPath = location.toString().replace("file:/", "")
-                .replace("bin", "src").replace("/target/classes/","/images");
+        String srcPath = location.toString().replace("/","\\");;
+               /* .replace("file:/", "")
+                .replace("bin", "src").replace("/target/classes/","/images")
+                */
         System.out.println("================================================================="+ srcPath+"=================================================================");
         return srcPath;
     }
 
-    /*private void savePhoto1(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
+    private void savePhoto1(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -68,7 +70,7 @@ public class MessageController {
 
             message.setFilename(resultFilename);
         }
-    }*/
+    }
     private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -137,7 +139,7 @@ public class MessageController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("message", message);
         } else {
-            savePhoto(message, file);
+            savePhoto1(message, file);
 
             model.addAttribute("message", null);
 
@@ -202,7 +204,7 @@ public class MessageController {
                 message.setPhone(phone);
             }
 
-            savePhoto(message, file);
+            savePhoto1(message, file);
 
             messageRepo.save(message);
         }
