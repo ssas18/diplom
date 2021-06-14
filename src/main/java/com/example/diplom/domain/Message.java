@@ -19,6 +19,7 @@ public class Message {
     private String text;
     @Length(max = 255, message = "Message too long (more than 255)")
     private String tag;
+    @NotBlank(message = "Please fill the phone")
     @Length(max = 12, message = "Phone too long (more than 12)")
     private String phone;
 

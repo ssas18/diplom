@@ -6,8 +6,9 @@
     <div class="form-group mt-3">
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="text" class="form-control ${(textError??)?string('is-invalid', '')}"
-                       value="<#if message??>${message.text}</#if>" name="text" placeholder="Введите сообщение" />
+                <input type="text" value="<#if message??>${message.text}</#if>" name="text"
+                       class="form-control ${(textError??)?string('is-invalid', '')}"
+                       placeholder="Введите сообщение" />
                 <#if textError??>
                     <div class="invalid-feedback">
                         ${textError}
@@ -15,8 +16,8 @@
                 </#if>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control"
-                       value="<#if message??>${message.phone}</#if>" name="phone" placeholder="Телефон">
+                <input type="tel" class="form-control"
+                       value="<#if message??>${message.phone}</#if>" name="phone" placeholder="Телефон в формате - 89876543221" pattern="[8]{1}[0-9]{3}[0-9]{3}[0-9]{2}[0-9]{2}">
                 <#if phoneError??>
                     <div class="invalid-feedback">
                         ${phoneError}
@@ -51,6 +52,7 @@
         </form>
     </div>
 </div>
+
 
 <#-- <div class="form-group">
                 <input type="text" class="form-control"
