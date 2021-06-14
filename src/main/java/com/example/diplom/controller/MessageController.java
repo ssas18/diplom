@@ -46,13 +46,12 @@ public class MessageController {
         URL location = MessageController.class.getProtectionDomain().getCodeSource()
                 .getLocation();
         String srcPath = location.toString().replace("file:/", "")
-                .replace("bin", "src").replace("/target/classes/","\\src\\main\\resources\\images")
-               .replace("/","\\");
-         /* C:\Users\sasha\Downloads\Telegram_Desktop\project1\src\main\resources\images*/
+                .replace("bin", "src").replace("/target/classes/","/images");
+        System.out.println("================================================================="+ srcPath+"=================================================================");
         return srcPath;
     }
 
-    private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
+    /*private void savePhoto1(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -65,12 +64,12 @@ public class MessageController {
             String uuidFile = UUID.randomUUID().toString();
             String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-            file.transferTo(new File( path + "\\" + resultFilename));
+            file.transferTo(new File( path + "/" + resultFilename));
 
             message.setFilename(resultFilename);
         }
-    }
-    private void savePhoto1(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
+    }*/
+    private void savePhoto(@Valid Message message, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -112,6 +111,7 @@ public class MessageController {
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal User currentUser
     ) {
+        getMySourcePath();
         Page<MessageDto> page = messageService.messageList(pageable, filter, currentUser);
 
         model.addAttribute("page", page);
