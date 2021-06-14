@@ -46,9 +46,9 @@ public class MessageController {
         URL location = MessageController.class.getProtectionDomain().getCodeSource()
                 .getLocation();
         String srcPath = location.toString().replace("file:/", "")
-                .replace("bin", "src").replace("/target/classes/","/images")
-                .replace("/","\\");
-
+                .replace("bin", "src").replace("/target/classes/","/src/main/resources/images")
+               /* .replace("/","\\")*/;
+         /* C:\Users\sasha\Downloads\Telegram_Desktop\project1\src\main\resources\images*/
         return srcPath;
     }
 
@@ -61,11 +61,9 @@ public class MessageController {
             }
              String path  = getMySourcePath();
             System.out.println(path);
+            String resultFilename =file.getOriginalFilename();
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File( path + "\\" + resultFilename));
+            file.transferTo(new File( path + "/" + resultFilename));
 
             message.setFilename(resultFilename);
         }
