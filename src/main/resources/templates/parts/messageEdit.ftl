@@ -47,7 +47,7 @@
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
             <input type="hidden" name="id" value="<#if message??>${message.id}</#if>" />
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Сохранить объявление </button>
+                <button type="submit" class="btn btn-success">Сохранить объявление </button>
             </div>
         </form>
     </div>

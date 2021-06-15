@@ -24,20 +24,23 @@
                             <i class="far fa-heart"></i>
                         </#if>
                         ${message.likes}
+
                     </a>
+
                     <#if message.author.id == currentUserId>
-                        <a class="col btn btn-primary" href="/user-messages/${message.author.id}?message=${message.id}">
+                        <a class="col btn btn-primary md-3" href="/user-messages/${message.author.id}?message=${message.id}">
                             Изменить
                         </a>
+
                     </#if>
-                          </a>
+
                     <#if message.author.id == currentUserId>
 
                         <form action="/main/${message.id}" method="get">
                             <input type="submit" class="col btn btn-danger" value="Удалить">
                         </form>
 
-                        </a>
+
 
                     </#if>
                     <#if isAdmin>
